@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="MyVideo">
+      <UniqueIdentifier>{ead6881b-e05d-4c35-8789-4b7053121d52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DllExport">
+      <UniqueIdentifier>{279ff7c0-c08c-405d-9b59-6a602594ab92}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="MyVideo.h">
+      <Filter>MyVideo</Filter>
+    </ClInclude>
+    <ClInclude Include="framework.h">
+      <Filter>DllExport</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>DllExport</Filter>
+    </ClInclude>
+    <ClInclude Include="CapCV.h">
+      <Filter>MyVideo</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="MyVideo.cpp">
+      <Filter>MyVideo</Filter>
+    </ClCompile>
+    <ClCompile Include="dllmain.cpp">
+      <Filter>DllExport</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>DllExport</Filter>
+    </ClCompile>
+    <ClCompile Include="CapCV.cpp">
+      <Filter>MyVideo</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

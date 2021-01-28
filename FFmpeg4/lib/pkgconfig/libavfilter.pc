@@ -1,0 +1,14 @@
+prefix=D:/output
+exec_prefix=${prefix}
+libdir=D:/output/lib
+includedir=D:/output/include
+
+Name: libavfilter
+Description: Libav video filtering library
+Version: 7.1.0
+Requires: 
+Requires.private: libswscale >= 5.0.1, libavformat >= 58.2.0, libavcodec >= 58.12.1, libavresample >= 4.0.0, libavutil >= 56.8.0
+Conflicts:
+Libs: -L${libdir} -lavfilter 
+Libs.private: -lm
+Cflags: -I${includedir}
