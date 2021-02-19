@@ -70,7 +70,7 @@
   </PropertyGroup>
   <PropertyGroup Label="QtSettings" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <QtInstall>msvc2019_64</QtInstall>
-    <QtModules>core;gui;opengl;widgets</QtModules>
+    <QtModules>charts;core;datavisualization;gui;opengl;widgets</QtModules>
   </PropertyGroup>
   <PropertyGroup Label="QtSettings" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <QtInstall>msvc2019_64</QtInstall>
@@ -141,7 +141,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>GeneratedFiles\$(ConfigurationName);GeneratedFiles;.;bitmap;C:\opencv\myBuild\install\include;$(Platform)\$(Configuration);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>GeneratedFiles\$(ConfigurationName);GeneratedFiles;.;C:\opencv\myBuild\install\include;$(Platform)\$(Configuration);C:\qwt\qwt-6.1.6\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus -w34100 -w34189 -w44996 -w44456 -w44457 -w44458 %(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>debug\</AssemblerListingLocation>
       <BrowseInformation>false</BrowseInformation>
@@ -150,7 +150,7 @@
       <ExceptionHandling>Sync</ExceptionHandling>
       <ObjectFileName>debug\</ObjectFileName>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_WINDOWS;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;QT_DLL;QWT_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessToFile>false</PreprocessToFile>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -159,8 +159,8 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>opencv_calib3d450d.lib;opencv_core450d.lib;opencv_dnn450d.lib;opencv_features2d450d.lib;opencv_flann450d.lib;opencv_gapi450d.lib;opencv_highgui450d.lib;opencv_imgcodecs450d.lib;opencv_imgproc450d.lib;opencv_ml450d.lib;opencv_objdetect450d.lib;opencv_photo450d.lib;opencv_stitching450d.lib;opencv_video450d.lib;opencv_videoio450d.lib;CapCV.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(Platform)\$(Configuration);C:\opencv\myBuild\install\x64\vc16\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opencv_calib3d450d.lib;opencv_core450d.lib;opencv_dnn450d.lib;opencv_features2d450d.lib;opencv_flann450d.lib;opencv_gapi450d.lib;opencv_highgui450d.lib;opencv_imgcodecs450d.lib;opencv_imgproc450d.lib;opencv_ml450d.lib;opencv_objdetect450d.lib;opencv_photo450d.lib;opencv_stitching450d.lib;opencv_video450d.lib;opencv_videoio450d.lib;CapCV.lib;qwtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(Platform)\$(Configuration);C:\opencv\myBuild\install\x64\vc16\lib;C:\qwt\qwt-6.1.6\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
       <DataExecutionPrevention>true</DataExecutionPrevention>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -197,6 +197,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CQtOpencvViewerGl.cpp" />
+    <ClCompile Include="CustomInputHandler.cpp" />
+    <ClCompile Include="ScatterDataModifier.cpp" />
+    <ClCompile Include="SynthesisWidget.cpp" />
+    <ClCompile Include="GraphDataGenerator.cpp" />
+    <ClCompile Include="CaptureWidget.cpp" />
+    <ClCompile Include="VideoPanel.cpp" />
+    <ClInclude Include="GraphDataGenerator.h" />
+    <QtMoc Include="SynthesisWidget.h" />
+    <QtMoc Include="VideoPanel.h" />
+    <QtMoc Include="CustomInputHandler.h" />
     <ClInclude Include="QFileOper.h">
       <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">input</DynamicSource>
       <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(Filename).moc</QtMocFileName>
@@ -207,16 +217,15 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mainwindow.cpp" />
     <ClCompile Include="MatView.cpp" />
-    <ClCompile Include="OpenCV\my_mixgaussians.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="bitmap\bitmap_image.hpp" />
     <QtMoc Include="CQtOpencvViewerGl.h" />
     <QtMoc Include="MatView.h" />
+    <QtMoc Include="ScatterDataModifier.h" />
+    <QtMoc Include="CaptureWidget.h" />
     <ClInclude Include="ui_mainwindow.h" />
     <QtMoc Include="mainwindow.h">
     </QtMoc>
-    <ClInclude Include="OpenCV\my_mixgaussians.h" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="debug\moc_predefs.h.cbt">
@@ -239,6 +248,7 @@
   <ItemGroup>
     <QtUic Include="mainwindow.ui">
     </QtUic>
+    <QtUic Include="themewidget.ui" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

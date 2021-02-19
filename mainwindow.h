@@ -33,7 +33,6 @@ private:
     void GetFrameInfo(cv::Mat& image, std::vector<cv::Point>& result, QString& str);
 
 private slots:
-    void on_pushButton_clicked();
     void OpenDialog();
     void SliderValueChange(int pos);
     void SliderValueChange();

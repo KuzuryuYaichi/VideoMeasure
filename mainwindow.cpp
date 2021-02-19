@@ -1,8 +1,9 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "opencv/my_mixgaussians.h"
 #include "CapCV.h"
 #include "MatView.h"
+#include "CaptureWidget.h"
+#include "SynthesisWidget.h"
 
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWindow)
 {
@@ -21,6 +22,8 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     qTimer = new QTimer(this);
     connect(qTimer, SIGNAL(timeout()), this, SLOT(SliderValueChange()));
     fileOper = new QFileOper();
+    ui->tab_Capture->layout()->addWidget(new CaptureWidget(this));
+    ui->tab_Synthesis->layout()->addWidget(new SynthesisWidget(this));
 }
 
 MainWindow::~MainWindow()
@@ -48,11 +51,6 @@ void MainWindow::OnEndTimeUpdate(const QTime& t)
     {
         ui->timeEnd->setTime(QTime(0,0,0,0).addMSecs(total));
     }
-}
-
-void MainWindow::on_pushButton_clicked()
-{
-    my_mixGaussians mm;
 }
 
 void MainWindow::OpenDialog()
