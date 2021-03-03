@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CAP_CV_H
+#define CAP_CV_H
 
 #include <opencv2/opencv.hpp>
 
@@ -29,3 +30,5 @@ EXPORT bool GetFrameMat(cv::Mat&, cv::Mat&, std::vector<cv::Point>& result);
 EXPORT long GetFrameWidth();
 
 EXPORT long GetFrameHeight();
+
+#endif

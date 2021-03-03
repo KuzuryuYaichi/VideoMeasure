@@ -196,6 +196,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CapturePanel.cpp" />
     <ClCompile Include="CQtOpencvViewerGl.cpp" />
     <ClCompile Include="CustomInputHandler.cpp" />
     <ClCompile Include="ScatterDataModifier.cpp" />
@@ -203,7 +204,10 @@
     <ClCompile Include="GraphDataGenerator.cpp" />
     <ClCompile Include="CaptureWidget.cpp" />
     <ClCompile Include="VideoPanel.cpp" />
+    <ClCompile Include="VideoWidget.cpp" />
+    <QtMoc Include="CapturePanel.h" />
     <ClInclude Include="GraphDataGenerator.h" />
+    <QtMoc Include="VideoWidget.h" />
     <QtMoc Include="SynthesisWidget.h" />
     <QtMoc Include="VideoPanel.h" />
     <QtMoc Include="CustomInputHandler.h" />
@@ -249,6 +253,7 @@
     <QtUic Include="mainwindow.ui">
     </QtUic>
     <QtUic Include="themewidget.ui" />
+    <QtUic Include="VideoWidget.ui" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

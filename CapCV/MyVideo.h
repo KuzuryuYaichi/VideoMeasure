@@ -1,10 +1,13 @@
-#pragma once
+#ifndef MY_VIDEO_H
+#define MY_VIDEO_H
 
 #include <opencv2/opencv.hpp>
 #include <string>
 #include <vector>
 
-class MyVideo
+#define EXPORT __declspec(dllexport)
+
+class EXPORT MyVideo
 {
 public:
 	MyVideo(std::string filePath);
@@ -41,4 +44,4 @@ private:
 	bool isOpen = false;
 };
 
-int ReadVideo();
+#endif

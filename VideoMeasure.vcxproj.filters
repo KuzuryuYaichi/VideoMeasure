@@ -73,6 +73,12 @@
     <ClCompile Include="VideoPanel.cpp">
       <Filter>DataVisual\2D</Filter>
     </ClCompile>
+    <ClCompile Include="VideoWidget.cpp">
+      <Filter>DataVisual\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="CapturePanel.cpp">
+      <Filter>DataVisual\2D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="debug\moc_predefs.h.cbt">
@@ -87,6 +93,9 @@
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="themewidget.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="VideoWidget.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>
@@ -113,6 +122,12 @@
       <Filter>DataVisual\3D</Filter>
     </QtMoc>
     <QtMoc Include="VideoPanel.h">
+      <Filter>DataVisual\2D</Filter>
+    </QtMoc>
+    <QtMoc Include="VideoWidget.h">
+      <Filter>DataVisual\2D</Filter>
+    </QtMoc>
+    <QtMoc Include="CapturePanel.h">
       <Filter>DataVisual\2D</Filter>
     </QtMoc>
   </ItemGroup>

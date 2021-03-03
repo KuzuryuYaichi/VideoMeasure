@@ -83,6 +83,8 @@ public:
         horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
         horizontalLayout->addItem(horizontalSpacer);
+
+
         gridLayout->addLayout(horizontalLayout, 0, 0, 1, 3);
 
 

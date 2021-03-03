@@ -117,7 +117,7 @@ void GraphDataGenerator::setupModel()
     QStringList points;
     points << "1" << "2" << "3" << "4" << "5" << "6" << "7" << "8" << "9" << "10";
     QStringList positions;
-    positions << "x" << "y" << "z";
+    positions << "X Axis" << "Y Axis" << "Z Axis";
 
     // Set up data
     float point_val[10][3];
@@ -125,11 +125,11 @@ void GraphDataGenerator::setupModel()
 
     // Add labels
     //! [10]
-    m_graph->rowAxis()->setTitle("Week of year");
+    m_graph->rowAxis()->setTitle("Y Axis");
     m_graph->rowAxis()->setTitleVisible(true);
-    m_graph->columnAxis()->setTitle("Day of week");
+    m_graph->columnAxis()->setTitle("X Axis");
     m_graph->columnAxis()->setTitleVisible(true);
-    m_graph->valueAxis()->setTitle("Hours spent on the Internet");
+    m_graph->valueAxis()->setTitle("Z Axis");
     m_graph->valueAxis()->setTitleVisible(true);
     m_graph->valueAxis()->setLabelFormat("%.1f h");
     //! [10]

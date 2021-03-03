@@ -45,7 +45,7 @@ void SynthesisWidget::Synthesis_Setup()
     }
 
     QSize screenSize = graph->screen()->size();
-    container->setMinimumSize(QSize(screenSize.width() / 2, screenSize.height() / 2));
+    container->setMinimumSize(screenSize / 2);
     container->setMaximumSize(screenSize);
     container->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     container->setFocusPolicy(Qt::StrongFocus);

@@ -10,6 +10,8 @@ bool InitMyVideo(const char *str)
 	myVideo = new MyVideo(std::string(str));
 	if (myVideo != nullptr)
 		return myVideo->IsOpen();
+	else
+		return false;
 }
 
 void DestroyMyVideo()

@@ -11,7 +11,7 @@ MyVideo::MyVideo(std::string filePath)
 	bg = cv::createBackgroundSubtractorMOG2();
 	bg->setNMixtures(100);
 	//bg.bShadowDetection = false;
-	isOpen = true;
+	isOpen = cap.isOpened();
 }
 
 MyVideo::~MyVideo()

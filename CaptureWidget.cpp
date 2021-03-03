@@ -1,6 +1,5 @@
 #include "CaptureWidget.h"
 #include "ui_themewidget.h"
-#include "VideoPanel.h"
 
 #include <QtCharts/QChartView>
 #include <QtCharts/QPieSeries>
@@ -40,11 +39,13 @@ CaptureWidget::CaptureWidget(QWidget* parent) :
     populateAnimationBox();
     populateLegendBox();
 
-    QChartView* chartView;
+    capturePanel[0] = new CapturePanel("Camera X", this);
+    capturePanel[1] = new CapturePanel("Camera Y", this);
+    capturePanel[2] = new CapturePanel("Camera Z", this);
 
-    m_ui->gridLayout->addWidget(new VideoPanel("Camera X", this), 1, 0);
-    m_ui->gridLayout->addWidget(new VideoPanel("Camera Y", this), 1, 1);
-    m_ui->gridLayout->addWidget(new VideoPanel("Camera Z", this), 1, 2);
+    m_ui->gridLayout->addWidget(capturePanel[0], 1, 0);
+    m_ui->gridLayout->addWidget(capturePanel[1], 1, 1);
+    m_ui->gridLayout->addWidget(capturePanel[2], 1, 2);
 
     // Set defaults
     m_ui->antialiasCheckBox->setChecked(true);
@@ -66,12 +67,13 @@ CaptureWidget::~CaptureWidget()
 DataTable CaptureWidget::generateRandomData(int listCount, int valueMax, int valueCount) const
 {
     DataTable dataTable;
-
     // generate random data
-    for (int i(0); i < listCount; i++) {
+    for (int i(0); i < listCount; i++)
+    {
         DataList dataList;
         qreal yValue(0);
-        for (int j(0); j < valueCount; j++) {
+        for (int j(0); j < valueCount; j++)
+        {
             yValue = yValue + QRandomGenerator::global()->bounded(valueMax / (qreal)valueCount);
             QPointF value((j + QRandomGenerator::global()->generateDouble()) * ((qreal)m_valueMax / (qreal)valueCount), yValue);
             QString label = "Slice " + QString::number(i) + ":" + QString::number(j);
@@ -79,7 +81,6 @@ DataTable CaptureWidget::generateRandomData(int listCount, int valueMax, int val
         }
         dataTable << dataList;
     }
-
     return dataTable;
 }
 
@@ -124,7 +125,6 @@ QChart* CaptureWidget::createScatterChart(QString title) const
 
 QChart* CaptureWidget::createScatterChart() const
 {
-    // scatter chart
     QChart* chart = new QChart();
     QString name("Series ");
     int nameIndex = 0;
@@ -136,7 +136,6 @@ QChart* CaptureWidget::createScatterChart() const
         nameIndex++;
         chart->addSeries(series);
     }
-
     chart->createDefaultAxes();
     chart->axes(Qt::Horizontal).first()->setRange(0, m_valueMax);
     chart->axes(Qt::Vertical).first()->setRange(0, m_valueCount);
@@ -153,8 +152,10 @@ void CaptureWidget::updateUI()
     QChart::ChartTheme theme = static_cast<QChart::ChartTheme>(m_ui->themeComboBox->itemData(m_ui->themeComboBox->currentIndex()).toInt());
     //![6]
     const auto charts = m_charts;
-    if (!m_charts.isEmpty() && m_charts.at(0)->chart()->theme() != theme) {
-        for (QChartView* chartView : charts) {
+    if (!m_charts.isEmpty() && m_charts.at(0)->chart()->theme() != theme)
+    {
+        for (QChartView* chartView : charts)
+        {
             //![7]
             chartView->chart()->setTheme(theme);
             //![7]
@@ -163,36 +164,44 @@ void CaptureWidget::updateUI()
         // Set palette colors based on selected theme
         //![8]
         QPalette pal = window()->palette();
-        if (theme == QChart::ChartThemeLight) {
+        if (theme == QChart::ChartThemeLight)
+        {
             pal.setColor(QPalette::Window, QRgb(0xf0f0f0));
             pal.setColor(QPalette::WindowText, QRgb(0x404044));
             //![8]
         }
-        else if (theme == QChart::ChartThemeDark) {
+        else if (theme == QChart::ChartThemeDark)
+        {
             pal.setColor(QPalette::Window, QRgb(0x121218));
             pal.setColor(QPalette::WindowText, QRgb(0xd6d6d6));
         }
-        else if (theme == QChart::ChartThemeBlueCerulean) {
+        else if (theme == QChart::ChartThemeBlueCerulean)
+        {
             pal.setColor(QPalette::Window, QRgb(0x40434a));
             pal.setColor(QPalette::WindowText, QRgb(0xd6d6d6));
         }
-        else if (theme == QChart::ChartThemeBrownSand) {
+        else if (theme == QChart::ChartThemeBrownSand)
+        {
             pal.setColor(QPalette::Window, QRgb(0x9e8965));
             pal.setColor(QPalette::WindowText, QRgb(0x404044));
         }
-        else if (theme == QChart::ChartThemeBlueNcs) {
+        else if (theme == QChart::ChartThemeBlueNcs)
+        {
             pal.setColor(QPalette::Window, QRgb(0x018bba));
             pal.setColor(QPalette::WindowText, QRgb(0x404044));
         }
-        else if (theme == QChart::ChartThemeHighContrast) {
+        else if (theme == QChart::ChartThemeHighContrast)
+        {
             pal.setColor(QPalette::Window, QRgb(0xffab03));
             pal.setColor(QPalette::WindowText, QRgb(0x181818));
         }
-        else if (theme == QChart::ChartThemeBlueIcy) {
+        else if (theme == QChart::ChartThemeBlueIcy)
+        {
             pal.setColor(QPalette::Window, QRgb(0xcee7f0));
             pal.setColor(QPalette::WindowText, QRgb(0x404044));
         }
-        else {
+        else
+        {
             pal.setColor(QPalette::Window, QRgb(0xf0f0f0));
             pal.setColor(QPalette::WindowText, QRgb(0x404044));
         }
@@ -208,9 +217,9 @@ void CaptureWidget::updateUI()
 
     // Update animation options
     //![9]
-    QChart::AnimationOptions options(
-        m_ui->animatedComboBox->itemData(m_ui->animatedComboBox->currentIndex()).toInt());
-    if (!m_charts.isEmpty() && m_charts.at(0)->chart()->animationOptions() != options) {
+    QChart::AnimationOptions options(m_ui->animatedComboBox->itemData(m_ui->animatedComboBox->currentIndex()).toInt());
+    if (!m_charts.isEmpty() && m_charts.at(0)->chart()->animationOptions() != options)
+    {
         for (QChartView* chartView : charts)
             chartView->chart()->setAnimationOptions(options);
     }
@@ -218,15 +227,17 @@ void CaptureWidget::updateUI()
 
     // Update legend alignment
     //![10]
-    Qt::Alignment alignment(
-        m_ui->legendComboBox->itemData(m_ui->legendComboBox->currentIndex()).toInt());
+    Qt::Alignment alignment(m_ui->legendComboBox->itemData(m_ui->legendComboBox->currentIndex()).toInt());
 
-    if (!alignment) {
+    if (!alignment)
+    {
         for (QChartView* chartView : charts)
             chartView->chart()->legend()->hide();
     }
-    else {
-        for (QChartView* chartView : charts) {
+    else
+    {
+        for (QChartView* chartView : charts)
+        {
             chartView->chart()->legend()->setAlignment(alignment);
             chartView->chart()->legend()->show();
         }

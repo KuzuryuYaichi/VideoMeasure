@@ -135,7 +135,8 @@
       <AdditionalLibraryDirectories>C:\opencv\myBuild\install\x64\vc16\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /r /y $(ProjectDir)CapCV.h $(SolutionDir)$(Platform)\$(Configuration)\</Command>
+      <Command>xcopy /r /y $(ProjectDir)CapCV.h $(SolutionDir)$(Platform)\$(Configuration)\
+xcopy /r /y $(ProjectDir)MyVideo.h $(SolutionDir)$(Platform)\$(Configuration)\</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
