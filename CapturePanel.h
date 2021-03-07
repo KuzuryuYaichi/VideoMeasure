@@ -5,6 +5,9 @@
 #include <QLayout>
 #include <QtCharts/QChartGlobal>
 #include "CQtOpencvViewerGl.h"
+#include <QtWidgets/QTableWidget>
+#include "CustomScatterTableModel.h"
+#include "MyVideo.h"
 
 QT_BEGIN_NAMESPACE
 class QComboBox;
@@ -29,6 +32,9 @@ public:
     explicit CapturePanel(QWidget* parent = 0);
     explicit CapturePanel(QString title, QWidget* parent = 0);
     ~CapturePanel();
+    void SetMapper(int xRow, int yRow);
+    void ModelSetData(std::vector<cv::Point>& result);
+
 
     //private Q_SLOTS:
     //    void updateUI();
@@ -38,14 +44,14 @@ private:
     QChart* createScatterChart() const;
     DataTable generateRandomData(int listCount, int valueMax, int valueCount) const;
 
-private:
-    int m_listCount;
-    int m_valueMax;
-    int m_valueCount;
-    QVBoxLayout* layout;
+public:
     CQtOpenCVViewerGl* MatDisplay = nullptr;
+
+private:
+    QVBoxLayout* layout;
     QChartView* chartView;
-    DataTable m_dataTable;
+    QTableView* m_tableWidget;
+    CustomScatterTableModel* model;
 };
 
 #endif /* THEMEWIDGET_H */

@@ -21,6 +21,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     ui->tab_Video->layout()->addWidget(videoWidget = new VideoWidget(this));
     ui->tab_Capture->layout()->addWidget(captureWidget = new CaptureWidget(this));
     ui->tab_Synthesis->layout()->addWidget(synthesisWidget = new SynthesisWidget(this));
+    captureWidget->SetTableWidget(synthesisWidget->getTableWidget());
     createActions();
 }
 
@@ -247,7 +248,6 @@ void MainWindow::SliderMoved(int pos)
         m->SetPosFrames(pos);
 }
 
-
 void MainWindow::GetFrameInfo(cv::Mat& image, std::vector<cv::Point>& result, QString& str)
 {
     int nr = image.rows; // number of rows
@@ -272,12 +272,39 @@ void MainWindow::SliderValueChange(int pos)
     for (int i = 0; i < 3; ++i)
     {
         myVideo[i]->GetFrameMat(fore, orgFrame, result[i]);
-        videoWidget->videoPanel[i]->m_ui->MatDisplay->showImage(fore);
-        QString str("Frame[" + strPosFrame + "]\n");
-        GetFrameInfo(orgFrame, result[i], str);
-        str += "\n";
-        fileOper->Record(str);
-        videoWidget->videoPanel[i]->m_ui->OutputText->setText(str);
+        switch (ui->tabWidget->currentIndex())
+        {
+        case 0:
+        {
+            videoWidget->videoPanel[i]->m_ui->MatDisplay->showImage(orgFrame);
+            QString str("Frame[" + strPosFrame + "]\n");
+            GetFrameInfo(orgFrame, result[i], str);
+            str += "\n";
+            fileOper->Record(str);
+            videoWidget->videoPanel[i]->m_ui->OutputText->setText(str);
+            break;
+        }
+        case 1:
+        {
+            captureWidget->capturePanel[i]->MatDisplay->showImage(fore);
+            captureWidget->capturePanel[i]->ModelSetData(result[i]);
+            break;
+        }
+        case 2:
+        {
+            std::vector<std::vector<int>> res;
+            res.resize(10);
+            for (auto& vec : res)vec.resize(3);
+            for (int i = 0; i < result[0].size() && i < res.size(); ++i)
+            {
+                res[i][0] = result[0][i].x;
+                res[i][1] = result[0][i].y;
+                res[i][2] = result[0][i].x;
+            }
+            synthesisWidget->ModelSetData(res);
+            break;
+        }
+        }
     }
     ui->lblFrame->setText(strPosFrame + "/" + QString::number(mainVideo->GetFrameCount()));
     QTime q(0,0,0,0);

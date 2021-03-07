@@ -21,9 +21,14 @@
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QMessageBox>
 
+#include <QItemModelScatterDataProxy>
+
 SynthesisWidget::SynthesisWidget(QWidget* parent): QWidget(parent)
 {
     Synthesis_Setup();
+    model = new CustomTableModel;
+    QTableView* m_tableView = generator->getTableWidget();
+    m_tableView->setModel(model);
 }
 
 SynthesisWidget::~SynthesisWidget()
@@ -31,11 +36,15 @@ SynthesisWidget::~SynthesisWidget()
     delete generator;
 }
 
+QTableView* SynthesisWidget::getTableWidget()
+{
+    return generator->getTableWidget();
+}
+
 void SynthesisWidget::Synthesis_Setup()
 {
-    Q3DBars* graph = new Q3DBars();
+    Q3DScatter* graph = new Q3DScatter();
     QWidget* container = QWidget::createWindowContainer(graph);
-    ////! [0]
 
     if (!graph->hasContext()) {
         QMessageBox msgBox;
@@ -52,7 +61,7 @@ void SynthesisWidget::Synthesis_Setup()
 
     //! [1]
     QVBoxLayout* layout = new QVBoxLayout(this);
-    QTableWidget* tableWidget = new QTableWidget(this);
+    QTableView* tableWidget = new QTableView(this);
     layout->addWidget(container, 1);
     layout->addWidget(tableWidget, 1, Qt::AlignHCenter);
     //! [1]
@@ -65,17 +74,22 @@ void SynthesisWidget::Synthesis_Setup()
     // into rows and columns, so we simply set useModelCategories property to true to utilize this.
     QItemModelBarDataProxy* proxy = new QItemModelBarDataProxy(tableWidget->model());
     proxy->setUseModelCategories(true);
-    QBar3DSeries* series = new QBar3DSeries(proxy);
+    QScatter3DSeries* series = new QScatter3DSeries(proxy);
     series->setMesh(QAbstract3DSeries::MeshPyramid);
     graph->addSeries(series);
     //! [2]
 
     //! [3]
     generator = new GraphDataGenerator(graph, tableWidget);
-    QObject::connect(series, &QBar3DSeries::selectedBarChanged, generator, &GraphDataGenerator::selectFromTable);
-    QObject::connect(tableWidget, &QTableWidget::currentCellChanged, generator, &GraphDataGenerator::selectedFromTable);
+    //QObject::connect(series, &QScatter3DSeries::selectedItemChanged, generator, &GraphDataGenerator::selectFromTable);
+    //QObject::connect(tableWidget, &QTableWidget::currentCellChanged, generator, &GraphDataGenerator::selectedFromTable);
     //! [3]
 
     ////! [4]
     generator->start();
+}
+
+void SynthesisWidget::ModelSetData(std::vector<std::vector<int>>& result)
+{
+    model->ModelSetData(result);
 }

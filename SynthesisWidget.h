@@ -4,6 +4,8 @@
 #include <QtWidgets/QWidget>
 #include <QtDataVisualization/QDataVisualizationGlobal.h>
 #include "GraphDataGenerator.h"
+#include "CustomTableModel.h"
+#include <QTableView>
 
 QT_BEGIN_NAMESPACE_DATAVISUALIZATION
 class Q3DBars;
@@ -17,6 +19,8 @@ class SynthesisWidget : public QWidget
 public:
     explicit SynthesisWidget(QWidget* parent = 0);
     ~SynthesisWidget();
+    QTableView* getTableWidget();
+    void ModelSetData(std::vector<std::vector<int>>& result);
 
 private:
     void Synthesis_Setup();
@@ -26,6 +30,7 @@ private:
     int m_listCount;
     int m_valueMax;
     int m_valueCount;
+    CustomTableModel* model;
 };
 
 #endif /* THEMEWIDGET_H */

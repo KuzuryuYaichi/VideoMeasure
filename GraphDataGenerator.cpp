@@ -1,39 +1,10 @@
-/****************************************************************************
-**
-** Copyright (C) 2016 The Qt Company Ltd.
-** Contact: https://www.qt.io/licensing/
-**
-** This file is part of the Qt Data Visualization module of the Qt Toolkit.
-**
-** $QT_BEGIN_LICENSE:GPL$
-** Commercial License Usage
-** Licensees holding valid commercial Qt licenses may use this file in
-** accordance with the commercial license agreement provided with the
-** Software or, alternatively, in accordance with the terms contained in
-** a written agreement between you and The Qt Company. For licensing terms
-** and conditions see https://www.qt.io/terms-conditions. For further
-** information use the contact form at https://www.qt.io/contact-us.
-**
-** GNU General Public License Usage
-** Alternatively, this file may be used under the terms of the GNU
-** General Public License version 3 or (at your option) any later version
-** approved by the KDE Free Qt Foundation. The licenses are as published by
-** the Free Software Foundation and appearing in the file LICENSE.GPL3
-** included in the packaging of this file. Please review the following
-** information to ensure the GNU General Public License requirements will
-** be met: https://www.gnu.org/licenses/gpl-3.0.html.
-**
-** $QT_END_LICENSE$
-**
-****************************************************************************/
-
 #include "GraphDataGenerator.h"
 
 #define USE_STATIC_DATA
 
 using namespace QtDataVisualization;
 
-GraphDataGenerator::GraphDataGenerator(Q3DBars* bargraph, QTableWidget* tableWidget):
+GraphDataGenerator::GraphDataGenerator(Q3DScatter* bargraph, QTableView* tableWidget):
     m_graph(bargraph),
     m_dataTimer(0),
     m_columnCount(100),
@@ -43,8 +14,8 @@ GraphDataGenerator::GraphDataGenerator(Q3DBars* bargraph, QTableWidget* tableWid
     //! [5]
     // Set up bar specifications; make the bars as wide as they are deep,
     // and add a small space between them
-    m_graph->setBarThickness(1.0f);
-    m_graph->setBarSpacing(QSizeF(0.2, 0.2));
+    //m_graph->setBarThickness(1.0f);
+    //m_graph->setBarSpacing(QSizeF(0.2, 0.2));
 
     //! [5]
 #ifndef USE_STATIC_DATA
@@ -125,33 +96,33 @@ void GraphDataGenerator::setupModel()
 
     // Add labels
     //! [10]
-    m_graph->rowAxis()->setTitle("Y Axis");
-    m_graph->rowAxis()->setTitleVisible(true);
-    m_graph->columnAxis()->setTitle("X Axis");
-    m_graph->columnAxis()->setTitleVisible(true);
-    m_graph->valueAxis()->setTitle("Z Axis");
-    m_graph->valueAxis()->setTitleVisible(true);
-    m_graph->valueAxis()->setLabelFormat("%.1f h");
+    m_graph->axisY()->setTitle("Y Axis");
+    m_graph->axisY()->setTitleVisible(true);
+    m_graph->axisX()->setTitle("X Axis");
+    m_graph->axisX()->setTitleVisible(true);
+    m_graph->axisZ()->setTitle("Z Axis");
+    m_graph->axisZ()->setTitleVisible(true);
+    //m_graph->valueAxis()->setLabelFormat("%.1f h");
     //! [10]
 
     //! [11]
-    m_tableWidget->setRowCount(3);
-    m_tableWidget->setColumnCount(10);
-    m_tableWidget->setHorizontalHeaderLabels(points);
-    m_tableWidget->setVerticalHeaderLabels(positions);
+    //m_tableWidget->setRowCount(3);
+    //m_tableWidget->setColumnCount(10);
+    //m_tableWidget->setHorizontalHeaderLabels(points);
+    //m_tableWidget->setVerticalHeaderLabels(positions);
     m_tableWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     m_tableWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-    m_tableWidget->setCurrentCell(-1, -1);
+    //m_tableWidget->setCurrentCell(-1, -1);
     m_tableWidget->setSelectionMode(QAbstractItemView::SingleSelection);
     //! [11]
 
     //! [12]
-    for (int point = 0; point < points.size(); ++point) {
-        for (int position = 0; position < positions.size(); ++position) {
-            QModelIndex index = m_tableWidget->model()->index(position, point);
-            m_tableWidget->model()->setData(index, point_val[point][position]);
-        }
-    }
+    //for (int point = 0; point < points.size(); ++point) {
+    //    for (int position = 0; position < positions.size(); ++position) {
+    //        QModelIndex index = m_tableWidget->model()->index(position, point);
+    //        m_tableWidget->model()->setData(index, point_val[point][position]);
+    //    }
+    //}
     //! [12]
 }
 
@@ -172,7 +143,7 @@ void GraphDataGenerator::addRow()
 void GraphDataGenerator::selectFromTable(const QPoint& selection)
 {
     m_tableWidget->setFocus();
-    m_tableWidget->setCurrentCell(selection.x(), selection.y());
+    //m_tableWidget->setCurrentCell(selection.x(), selection.y());
 }
 //! [13]
 
@@ -181,7 +152,7 @@ void GraphDataGenerator::selectedFromTable(int currentRow, int currentColumn, in
 {
     Q_UNUSED(previousRow)
     Q_UNUSED(previousColumn)
-    m_graph->seriesList().at(0)->setSelectedBar(QPoint(currentRow, currentColumn));
+    //m_graph->seriesList().at(0)->setSelectedBar(QPoint(currentRow, currentColumn));
 }
 //! [14]
 
@@ -193,4 +164,9 @@ void GraphDataGenerator::fixTableSize()
     int height = m_tableWidget->verticalHeader()->length();
     height += m_tableWidget->horizontalHeader()->height();
     m_tableWidget->setFixedHeight(height + 2);
+}
+
+QTableView* GraphDataGenerator::getTableWidget()
+{
+    return m_tableWidget;
 }

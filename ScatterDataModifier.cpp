@@ -35,6 +35,7 @@
 #include <QtDataVisualization/Q3DCamera>
 #include <QtDataVisualization/QScatter3DSeries>
 #include <QtDataVisualization/Q3DTheme>
+
 #include <QtCore/qmath.h>
 #include <QtCore/QTextStream>
 #include <QtCore/QDebug>
@@ -62,6 +63,7 @@ ScatterDataModifier::ScatterDataModifier(Q3DScatter* scatter)
     series->setMesh(QAbstract3DSeries::MeshCube);
     series->setItemSize(0.15f);
     m_graph->addSeries(series);
+    m_graph->setTitle(QStringLiteral("Fish Trajectory"));
 
     //! [2]
     m_animationCameraX = new QPropertyAnimation(m_graph->scene()->activeCamera(), "xRotation");
@@ -100,8 +102,7 @@ ScatterDataModifier::ScatterDataModifier(Q3DScatter* scatter)
     m_selectionTimer = new QTimer(this);
     m_selectionTimer->setInterval(10);
     m_selectionTimer->setSingleShot(false);
-    QObject::connect(m_selectionTimer, &QTimer::timeout, this,
-        &ScatterDataModifier::triggerSelection);
+    QObject::connect(m_selectionTimer, &QTimer::timeout, this, &ScatterDataModifier::triggerSelection);
     m_selectionTimer->start();
     //! [1]
 }
@@ -123,9 +124,11 @@ void ScatterDataModifier::addData()
     // Read data items from the file to QVector
     QTextStream stream;
     QFile dataFile(":/data/data.txt");
-    if (dataFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+    if (dataFile.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
         stream.setDevice(&dataFile);
-        while (!stream.atEnd()) {
+        while (!stream.atEnd())
+        {
             QString line = stream.readLine();
             if (line.startsWith("#")) // Ignore comments
                 continue;
@@ -149,7 +152,8 @@ void ScatterDataModifier::addData()
     QScatterDataArray* dataArray = new QScatterDataArray;
     dataArray->resize(itemList.count());
     QScatterDataItem* ptrToDataArray = &dataArray->first();
-    for (int i = 0; i < itemList.count(); i++) {
+    for (int i = 0; i < itemList.count(); i++)
+    {
         ptrToDataArray->setPosition(itemList.at(i));
         ptrToDataArray++;
     }

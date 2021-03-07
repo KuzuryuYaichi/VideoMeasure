@@ -38,6 +38,9 @@
     <Filter Include="DataVisual\2D">
       <UniqueIdentifier>{f0484f85-5118-4f2e-aafe-b18d88513952}</UniqueIdentifier>
     </Filter>
+    <Filter Include="DataVisual\DataModel">
+      <UniqueIdentifier>{a36873d1-5026-4222-aa4f-36a221e6cba1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MatView.cpp">
@@ -78,6 +81,15 @@
     </ClCompile>
     <ClCompile Include="CapturePanel.cpp">
       <Filter>DataVisual\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="CustomTableModel.cpp">
+      <Filter>DataVisual\DataModel</Filter>
+    </ClCompile>
+    <ClCompile Include="FishDataSet.cpp">
+      <Filter>DataVisual\DataModel</Filter>
+    </ClCompile>
+    <ClCompile Include="CustomScatterTableModel.cpp">
+      <Filter>DataVisual\DataModel</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -129,6 +141,15 @@
     </QtMoc>
     <QtMoc Include="CapturePanel.h">
       <Filter>DataVisual\2D</Filter>
+    </QtMoc>
+    <QtMoc Include="CustomTableModel.h">
+      <Filter>DataVisual\DataModel</Filter>
+    </QtMoc>
+    <QtMoc Include="FishDataSet.h">
+      <Filter>DataVisual\DataModel</Filter>
+    </QtMoc>
+    <QtMoc Include="CustomScatterTableModel.h">
+      <Filter>DataVisual\DataModel</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
