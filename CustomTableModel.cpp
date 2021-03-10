@@ -21,6 +21,11 @@ CustomTableModel::CustomTableModel(QObject* parent): QAbstractTableModel(parent)
     }
 }
 
+CustomTableModel::CustomTableModel(QtDataVisualization::QScatterDataProxy* proxy, QObject* parent) : CustomTableModel(parent)
+{
+    this->proxy = proxy;
+}
+
 CustomTableModel::~CustomTableModel()
 {
     qDeleteAll(m_data);
@@ -43,7 +48,7 @@ QVariant CustomTableModel::headerData(int section, Qt::Orientation orientation, 
     if (role != Qt::DisplayRole)
         return QVariant();
     if (orientation == Qt::Horizontal)
-        return QString("%1").arg(section + 1);
+        return QString("No.%1").arg(section + 1);
     else
     {
         switch (section)
@@ -90,10 +95,17 @@ bool CustomTableModel::setData(const QModelIndex& index, const QVariant& value, 
 
 void CustomTableModel::ModelSetData(std::vector<std::vector<int>>& result)
 {
+    QtDataVisualization::QScatterDataArray *data = new QtDataVisualization::QScatterDataArray;
     for (int column = 0; column < m_ColumnCount; ++column)
+    {
+        *data << QVector3D(result[column][0], result[column][1], result[column][2]);
         for (int row = 0; row < m_RowCount; ++row)
+        {
             m_data[row]->replace(column, result[column][row]);
+        }
+    }
     emit dataChanged(index(0, 0), index(m_RowCount - 1, m_ColumnCount - 1));
+    proxy->resetArray(data);
 }
 
 Qt::ItemFlags CustomTableModel::flags(const QModelIndex& index) const

@@ -78,7 +78,7 @@ public:
     void retranslateUi(QWidget *VideoWidget)
     {
         VideoWidget->setWindowTitle(QCoreApplication::translate("VideoWidget", "Form", nullptr));
-        label->setText(QCoreApplication::translate("VideoWidget", "TextLabel", nullptr));
+        label->setText(QString());
         groupBox_3->setTitle(QCoreApplication::translate("VideoWidget", "\350\276\223\345\207\272", nullptr));
     } // retranslateUi
 

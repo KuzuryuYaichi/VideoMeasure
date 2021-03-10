@@ -54,11 +54,45 @@ private slots:
     void OnEndTimeUpdate(const QTime& t);
 
 private slots:
-    void newFile();
     void open();
     bool save();
     bool saveAs();
     void about();
+    void UpdateTheme();
+    void UpdateAntialiasing();
+    void UpdateAnimation();
+    void UpdateLegend();
+
+private:
+    QMenu* themeParkMenu;
+
+    QMenu* themeMenu;
+    QActionGroup* themeGroup;
+    QAction* LightAct;
+    QAction* BlueCeruleanAct;
+    QAction* DarkAct;
+    QAction* BrownSandAct;
+    QAction* BlueNCSAct;
+    QAction* HighContrastAct;
+    QAction* BlueIcyAct;
+    QAction* QtAct;
+
+    QMenu* animationMenu;
+    QActionGroup* animationGroup;
+    QAction* NoAnimationsAct;
+    QAction* GridAxisAnimationsAct;
+    QAction* SeriesAnimationsAct;
+    QAction* AllAnimationsAct;
+
+    QMenu* legendMenu;
+    QActionGroup* legendGroup;
+    QAction* NoLegendAct;
+    QAction* LegendTopAct;
+    QAction* LegendBottomAct;
+    QAction* LegendLeftAct;
+    QAction* LegendRightAct;
+
+    QAction* AntialiasAct;
 
 private:
     void createActions();

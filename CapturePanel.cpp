@@ -32,6 +32,7 @@ CapturePanel::CapturePanel(QWidget* parent) :
     QVBoxLayout* layout = new QVBoxLayout();
     MatDisplay = new CQtOpenCVViewerGl(this);
     this->setLayout(layout);
+    label = new QLabel(this);
     layout->addWidget(MatDisplay);
     chartView = new QChartView(createScatterChart());
     layout->addWidget(chartView);

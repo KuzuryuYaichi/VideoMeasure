@@ -1,16 +1,6 @@
 #ifndef GRAPHDATAGENERATOR_H
 #define GRAPHDATAGENERATOR_H
 
-//#include <QtDataVisualization/q3dbars.h>
-//#include <QtDataVisualization/qcategory3daxis.h>
-//#include <QtDataVisualization/qitemmodelbardataproxy.h>
-//#include <QtDataVisualization/qvalue3daxis.h>
-//#include <QtDataVisualization/q3dscene.h>
-//#include <QtDataVisualization/q3dcamera.h>
-//#include <QtDataVisualization/qbar3dseries.h>
-//#include <QtDataVisualization/q3dtheme.h>
-
-
 #include <QtDataVisualization/Q3DScatter>
 #include <QtDataVisualization/QScatterDataProxy>
 #include <QtDataVisualization/QValue3DAxis>
@@ -30,12 +20,14 @@
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QMessageBox>
 
+#include "CustomTableModel.h"
+
 using namespace QtDataVisualization;
 
 class GraphDataGenerator : public QObject
 {
 public:
-    explicit GraphDataGenerator(Q3DScatter* bargraph, QTableView* tableWidget);
+    explicit GraphDataGenerator(Q3DScatter* bargraph, QTableView* tableWidget, CustomTableModel* model);
     ~GraphDataGenerator();
 
     void setupModel();
@@ -47,7 +39,7 @@ public:
     void selectFromTable(const QPoint& selection);
     void selectedFromTable(int currentRow, int currentColumn, int previousRow, int previousColumn);
     void fixTableSize();
-    QTableView* getTableWidget();
+    void ModelSetData(std::vector<std::vector<int>>& result);
 
 private:
     Q3DScatter* m_graph;
@@ -55,6 +47,7 @@ private:
     int m_columnCount;
     int m_rowCount;
     QTableView* m_tableWidget;
+    CustomTableModel* model;
 };
 
 #endif

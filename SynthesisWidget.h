@@ -19,7 +19,6 @@ class SynthesisWidget : public QWidget
 public:
     explicit SynthesisWidget(QWidget* parent = 0);
     ~SynthesisWidget();
-    QTableView* getTableWidget();
     void ModelSetData(std::vector<std::vector<int>>& result);
 
 private:

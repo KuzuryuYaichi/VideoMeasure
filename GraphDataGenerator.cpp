@@ -4,12 +4,13 @@
 
 using namespace QtDataVisualization;
 
-GraphDataGenerator::GraphDataGenerator(Q3DScatter* bargraph, QTableView* tableWidget):
+GraphDataGenerator::GraphDataGenerator(Q3DScatter* bargraph, QTableView* tableWidget, CustomTableModel* model):
     m_graph(bargraph),
     m_dataTimer(0),
     m_columnCount(100),
     m_rowCount(50),
-    m_tableWidget(tableWidget)
+    m_tableWidget(tableWidget),
+    model(model)
 {
     //! [5]
     // Set up bar specifications; make the bars as wide as they are deep,
@@ -33,23 +34,20 @@ GraphDataGenerator::GraphDataGenerator(Q3DScatter* bargraph, QTableView* tableWi
 
     m_graph->seriesList().at(0)->setItemLabelFormat(QStringLiteral("@valueLabel"));
 #else
-    //! [6]
     // Set selection mode to slice row
     m_graph->setSelectionMode(QAbstract3DGraph::SelectionItemAndRow | QAbstract3DGraph::SelectionSlice);
-
-    //! [6]
 #endif
 
-    //! [7]
     // Set theme
-    m_graph->activeTheme()->setType(Q3DTheme::ThemeDigia);
+    m_graph->activeTheme()->setType(Q3DTheme::ThemeArmyBlue);
 
     // Set font
     m_graph->activeTheme()->setFont(QFont("Impact", 20));
 
     // Set preset camera position
-    m_graph->scene()->activeCamera()->setCameraPreset(Q3DCamera::CameraPresetFront);
-    //! [7]
+    m_graph->scene()->activeCamera()->setCameraPreset(Q3DCamera::CameraPresetFrontLow);
+
+    m_graph->setShadowQuality(QAbstract3DGraph::ShadowQualityNone);
 }
 
 GraphDataGenerator::~GraphDataGenerator()
@@ -166,7 +164,7 @@ void GraphDataGenerator::fixTableSize()
     m_tableWidget->setFixedHeight(height + 2);
 }
 
-QTableView* GraphDataGenerator::getTableWidget()
+void GraphDataGenerator::ModelSetData(std::vector<std::vector<int>>& result)
 {
-    return m_tableWidget;
+    model->ModelSetData(result);
 }

@@ -1,5 +1,4 @@
 #include "pch.h"
-
 #include "MyVideo.h"
 
 MyVideo::MyVideo(std::string filePath)

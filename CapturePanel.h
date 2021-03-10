@@ -4,6 +4,7 @@
 #include <QtWidgets/QWidget>
 #include <QLayout>
 #include <QtCharts/QChartGlobal>
+#include <QLabel>
 #include "CQtOpencvViewerGl.h"
 #include <QtWidgets/QTableWidget>
 #include "CustomScatterTableModel.h"
@@ -46,10 +47,11 @@ private:
 
 public:
     CQtOpenCVViewerGl* MatDisplay = nullptr;
+    QChartView* chartView;
+    QLabel* label;
 
 private:
     QVBoxLayout* layout;
-    QChartView* chartView;
     QTableView* m_tableWidget;
     CustomScatterTableModel* model;
 };

@@ -29,7 +29,7 @@ class CaptureWidget : public QWidget
 public:
     explicit CaptureWidget(QWidget* parent = 0);
     ~CaptureWidget();
-    void SetTableWidget(QTableView* m_tableWidget);
+    void SetTableWidget();
 
 public:
     CapturePanel* capturePanel[3];

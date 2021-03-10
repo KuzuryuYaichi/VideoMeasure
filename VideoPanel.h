@@ -27,9 +27,6 @@ public:
 //    void updateUI();
 
 private:
-    int m_listCount;
-    int m_valueMax;
-    int m_valueCount;
     QVBoxLayout* layout;
     CQtOpenCVViewerGl* MatDisplay = nullptr;
     DataTable m_dataTable;

@@ -40,9 +40,6 @@ CaptureWidget::CaptureWidget(QWidget* parent) :
     m_ui->gridLayout->addWidget(capturePanel[1], 1, 1);
     m_ui->gridLayout->addWidget(capturePanel[2], 1, 2);
 
-    // Set defaults
-    m_ui->antialiasCheckBox->setChecked(true);
-
     // Set the colors from the light theme as default ones
     QPalette pal = qApp->palette();
     pal.setColor(QPalette::Window, QRgb(0xf0f0f0));
@@ -55,7 +52,7 @@ CaptureWidget::~CaptureWidget()
     delete m_ui;
 }
 
-void CaptureWidget::SetTableWidget(QTableView* m_tableWidget)
+void CaptureWidget::SetTableWidget()
 {
     for (int i = 0; i < 3; ++i)
     {

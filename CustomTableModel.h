@@ -5,12 +5,14 @@
 #include <QtCore/QHash>
 #include <QtCore/QRect>
 #include "MyVideo.h"
+#include <QScatterDataProxy>
 
 class CustomTableModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:
     explicit CustomTableModel(QObject* parent = 0);
+    explicit CustomTableModel(QtDataVisualization::QScatterDataProxy* proxy, QObject* parent = 0);
     virtual ~CustomTableModel();
 
     int rowCount(const QModelIndex& parent = QModelIndex()) const;
@@ -28,6 +30,7 @@ private:
     QList<QVector<qreal>*> m_data;
     QHash<QString, QRect> m_mapping;
     int m_ColumnCount, m_RowCount;
+    QtDataVisualization::QScatterDataProxy* proxy;
 };
 
 #endif // CUSTOMTABLEMODEL_H

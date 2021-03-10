@@ -20,25 +20,16 @@
 #include <QtCore/QDebug>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QMessageBox>
-
 #include <QItemModelScatterDataProxy>
 
 SynthesisWidget::SynthesisWidget(QWidget* parent): QWidget(parent)
 {
     Synthesis_Setup();
-    model = new CustomTableModel;
-    QTableView* m_tableView = generator->getTableWidget();
-    m_tableView->setModel(model);
 }
 
 SynthesisWidget::~SynthesisWidget()
 {
     delete generator;
-}
-
-QTableView* SynthesisWidget::getTableWidget()
-{
-    return generator->getTableWidget();
 }
 
 void SynthesisWidget::Synthesis_Setup()
@@ -59,37 +50,37 @@ void SynthesisWidget::Synthesis_Setup()
     container->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     container->setFocusPolicy(Qt::StrongFocus);
 
-    //! [1]
     QVBoxLayout* layout = new QVBoxLayout(this);
     QTableView* tableWidget = new QTableView(this);
     layout->addWidget(container, 1);
     layout->addWidget(tableWidget, 1, Qt::AlignHCenter);
-    //! [1]
 
     tableWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     tableWidget->setAlternatingRowColors(true);
 
-    //! [2]
     // Since we are dealing with QTableWidget, the model will already have data sorted properly
     // into rows and columns, so we simply set useModelCategories property to true to utilize this.
-    QItemModelBarDataProxy* proxy = new QItemModelBarDataProxy(tableWidget->model());
-    proxy->setUseModelCategories(true);
+    QScatterDataProxy* proxy = new QScatterDataProxy();
+    model = new CustomTableModel(proxy);
+    tableWidget->setModel(model);
+    //QItemModelScatterDataProxy* proxy = new QItemModelScatterDataProxy(tableWidget->model(), "X Axis", "Y Axis", "Z Axis");
     QScatter3DSeries* series = new QScatter3DSeries(proxy);
     series->setMesh(QAbstract3DSeries::MeshPyramid);
-    graph->addSeries(series);
-    //! [2]
 
-    //! [3]
-    generator = new GraphDataGenerator(graph, tableWidget);
+    QScatterDataArray data;
+    for (int i = 0; i < 10; ++i)
+        data << QVector3D(i, i, i);
+    series->dataProxy()->addItems(data);
+    graph->addSeries(series);
+
+    generator = new GraphDataGenerator(graph, tableWidget, model);
     //QObject::connect(series, &QScatter3DSeries::selectedItemChanged, generator, &GraphDataGenerator::selectFromTable);
     //QObject::connect(tableWidget, &QTableWidget::currentCellChanged, generator, &GraphDataGenerator::selectedFromTable);
-    //! [3]
 
-    ////! [4]
     generator->start();
 }
 
 void SynthesisWidget::ModelSetData(std::vector<std::vector<int>>& result)
 {
-    model->ModelSetData(result);
+    generator->ModelSetData(result);
 }

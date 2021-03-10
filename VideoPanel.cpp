@@ -27,22 +27,15 @@
 
 VideoPanel::VideoPanel(QWidget* parent):
     QWidget(parent),
-    m_listCount(3),
-    m_valueMax(10),
-    m_valueCount(7),
     m_ui(new Ui_VideoWidget)
 {
     m_ui->setupUi(this);
 }
 
 VideoPanel::VideoPanel(QString title, QWidget* parent) :
-    QWidget(parent),
-    m_listCount(3),
-    m_valueMax(10),
-    m_valueCount(7),
-    m_ui(new Ui_VideoWidget)
+    VideoPanel(parent)
 {
-    m_ui->setupUi(this);
+    m_ui->label->setText(title);
 }
 
 VideoPanel::~VideoPanel()

@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 //#include "CapCV.h"
 #include "MatView.h"
+#include <QtCharts>
 
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWindow)
 {
@@ -21,7 +22,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     ui->tab_Video->layout()->addWidget(videoWidget = new VideoWidget(this));
     ui->tab_Capture->layout()->addWidget(captureWidget = new CaptureWidget(this));
     ui->tab_Synthesis->layout()->addWidget(synthesisWidget = new SynthesisWidget(this));
-    captureWidget->SetTableWidget(synthesisWidget->getTableWidget());
+    captureWidget->SetTableWidget();
     createActions();
 }
 
@@ -29,13 +30,6 @@ MainWindow::~MainWindow()
 {
     delete ui;
     delete fileOper;
-}
-
-void MainWindow::newFile()
-{
-    //if (maybeSave()) {
-    //    setCurrentFile(QString());
-    //}
 }
 
 void MainWindow::open()
@@ -81,14 +75,6 @@ void MainWindow::about()
 void MainWindow::createActions()
 {
     QMenu* fileMenu = menuBar()->addMenu(tr("&File"));
-    //QToolBar* fileToolBar = addToolBar(tr("File"));
-    const QIcon newIcon = QIcon::fromTheme("document-new", QIcon(":/images/new.png"));
-    QAction* newAct = new QAction(newIcon, tr("&New"), this);
-    newAct->setShortcuts(QKeySequence::New);
-    newAct->setStatusTip(tr("Create a new file"));
-    connect(newAct, &QAction::triggered, this, &MainWindow::newFile);
-    fileMenu->addAction(newAct);
-    //fileToolBar->addAction(newAct);
 
     const QIcon openIcon = QIcon::fromTheme("document-open", QIcon(":/images/open.png"));
     QAction* openAct = new QAction(openIcon, tr("&Open..."), this);
@@ -96,7 +82,6 @@ void MainWindow::createActions()
     openAct->setStatusTip(tr("Open an existing file"));
     connect(openAct, &QAction::triggered, this, &MainWindow::open);
     fileMenu->addAction(openAct);
-    //fileToolBar->addAction(openAct);
 
     const QIcon saveIcon = QIcon::fromTheme("document-save", QIcon(":/images/save.png"));
     QAction* saveAct = new QAction(saveIcon, tr("&Save"), this);
@@ -104,7 +89,6 @@ void MainWindow::createActions()
     saveAct->setStatusTip(tr("Save the document to disk"));
     connect(saveAct, &QAction::triggered, this, &MainWindow::save);
     fileMenu->addAction(saveAct);
-    //fileToolBar->addAction(saveAct);
 
     const QIcon saveAsIcon = QIcon::fromTheme("document-save-as");
     QAction* saveAsAct = fileMenu->addAction(saveAsIcon, tr("Save &As..."), this, &MainWindow::saveAs);
@@ -118,29 +102,58 @@ void MainWindow::createActions()
     exitAct->setShortcuts(QKeySequence::Quit);
     exitAct->setStatusTip(tr("Exit the application"));
 
-    QMenu* editMenu = menuBar()->addMenu(tr("&Edit"));
-    //QToolBar* editToolBar = addToolBar(tr("Edit"));
+    menuBar()->addSeparator();
 
-    const QIcon cutIcon = QIcon::fromTheme("edit-cut", QIcon(":/images/cut.png"));
-    QAction* cutAct = new QAction(cutIcon, tr("&Cut"), this);
-    cutAct->setShortcuts(QKeySequence::Cut);
-    cutAct->setStatusTip(tr("Cut the current selection's contents to the clipboard"));
-    editMenu->addAction(cutAct);
-    //editToolBar->addAction(cutAct);
+    themeParkMenu = menuBar()->addMenu(tr("&Theme"));
 
-    const QIcon copyIcon = QIcon::fromTheme("edit-copy", QIcon(":/images/copy.png"));
-    QAction* copyAct = new QAction(copyIcon, tr("&Copy"), this);
-    copyAct->setShortcuts(QKeySequence::Copy);
-    copyAct->setStatusTip(tr("Copy the current selection's contents to the clipboard"));
-    editMenu->addAction(copyAct);
-    //editToolBar->addAction(copyAct);
+    themeMenu = themeParkMenu->addMenu(tr("&Theme"));
+    themeGroup = new QActionGroup(this);
+    themeGroup->addAction(LightAct = themeMenu->addAction(tr("&Light"), this, &MainWindow::UpdateTheme));
+    LightAct->setCheckable(true);
+    themeGroup->addAction(BlueCeruleanAct = themeMenu->addAction(tr("&BlueCerulean"), this, &MainWindow::UpdateTheme));
+    BlueCeruleanAct->setCheckable(true);
+    themeGroup->addAction(DarkAct = themeMenu->addAction(tr("&Dark"), this, &MainWindow::UpdateTheme));
+    DarkAct->setCheckable(true);
+    themeGroup->addAction(BrownSandAct = themeMenu->addAction(tr("&BrownSand"), this, &MainWindow::UpdateTheme)); 
+    BrownSandAct->setCheckable(true);
+    themeGroup->addAction(BlueNCSAct = themeMenu->addAction(tr("&BlueNCS"), this, &MainWindow::UpdateTheme)); 
+    BlueNCSAct->setCheckable(true);
+    themeGroup->addAction(HighContrastAct = themeMenu->addAction(tr("&HighContrast"), this, &MainWindow::UpdateTheme)); 
+    HighContrastAct->setCheckable(true);
+    themeGroup->addAction(BlueIcyAct = themeMenu->addAction(tr("&BlueIcy"), this, &MainWindow::UpdateTheme)); 
+    BlueIcyAct->setCheckable(true);
+    themeGroup->addAction(QtAct = themeMenu->addAction(tr("&Qt"), this, &MainWindow::UpdateTheme)); 
+    QtAct->setCheckable(true);
+    LightAct->setChecked(true);
 
-    const QIcon pasteIcon = QIcon::fromTheme("edit-paste", QIcon(":/images/paste.png"));
-    QAction* pasteAct = new QAction(pasteIcon, tr("&Paste"), this);
-    pasteAct->setShortcuts(QKeySequence::Paste);
-    pasteAct->setStatusTip(tr("Paste the clipboard's contents into the current selection"));
-    editMenu->addAction(pasteAct);
-    //editToolBar->addAction(pasteAct);
+    animationMenu = themeParkMenu->addMenu(tr("&Animation"));
+    animationGroup = new QActionGroup(this);
+    animationGroup->addAction(NoAnimationsAct = animationMenu->addAction(tr("&NoAnimations"), this, &MainWindow::UpdateAnimation));
+    NoAnimationsAct->setCheckable(true);
+    animationGroup->addAction(GridAxisAnimationsAct = animationMenu->addAction(tr("&GridAxis Animations"), this, &MainWindow::UpdateAnimation));
+    GridAxisAnimationsAct->setCheckable(true);
+    animationGroup->addAction(SeriesAnimationsAct = animationMenu->addAction(tr("&Series Animations"), this, &MainWindow::UpdateAnimation));
+    SeriesAnimationsAct->setCheckable(true);
+    animationGroup->addAction(AllAnimationsAct = animationMenu->addAction(tr("&All Animations"), this, &MainWindow::UpdateAnimation));
+    AllAnimationsAct->setCheckable(true);
+    NoAnimationsAct->setChecked(true);
+
+    legendMenu = themeParkMenu->addMenu(tr("&Legend"));
+    legendGroup = new QActionGroup(this);
+    legendGroup->addAction(NoLegendAct = legendMenu->addAction(tr("&NoLegend"), this, &MainWindow::UpdateLegend));
+    NoLegendAct->setCheckable(true);
+    legendGroup->addAction(LegendTopAct = legendMenu->addAction(tr("&LegendTop"), this, &MainWindow::UpdateLegend));
+    LegendTopAct->setCheckable(true);
+    legendGroup->addAction(LegendBottomAct = legendMenu->addAction(tr("&LegendBottom"), this, &MainWindow::UpdateLegend));
+    LegendBottomAct->setCheckable(true);
+    legendGroup->addAction(LegendLeftAct = legendMenu->addAction(tr("&LegendLeft"), this, &MainWindow::UpdateLegend));
+    LegendLeftAct->setCheckable(true);
+    legendGroup->addAction(LegendRightAct = legendMenu->addAction(tr("&LegendRight"), this, &MainWindow::UpdateLegend));
+    LegendRightAct->setCheckable(true);
+    NoLegendAct->setChecked(true);
+
+    AntialiasAct = themeParkMenu->addAction(tr("&Antialias"), this, &MainWindow::UpdateAntialiasing);
+    AntialiasAct->setCheckable(true);
 
     menuBar()->addSeparator();
 
@@ -149,11 +162,6 @@ void MainWindow::createActions()
     aboutAct->setStatusTip(tr("Show the application's About box"));
     QAction* aboutQtAct = helpMenu->addAction(tr("About &Qt"), qApp, &QApplication::aboutQt);
     aboutQtAct->setStatusTip(tr("Show the Qt library's About box"));
-
-#ifndef QT_NO_CLIPBOARD
-    cutAct->setEnabled(false);
-    copyAct->setEnabled(false);
-#endif // !QT_NO_CLIPBOARD
 }
 //! [24]
 
@@ -180,27 +188,28 @@ void MainWindow::OnEndTimeUpdate(const QTime& t)
 
 void MainWindow::OpenDialog()
 {
+    QString openPath("C:/Share/Fish");
+    QString nameFilter("*.mp4;;*.avi");
+    QString filter("*.mp4");
+    QString const title[3] = { "Camera X","Camera Y","Camera Z" };
+    int i = 0;
     for (auto& m : myVideo)
     {
         if (m != nullptr)
             delete m;
         QString filter;
         QFileDialog openDialog;
-        openDialog.setAcceptMode(QFileDialog::AcceptOpen);//设置对话框打开的模式
-        openDialog.setWindowTitle("选取视频文件");//设置对话框的标题
-        QString path("C:/Share/Fish"); //设置对话框的打开路径(只是路径，加上文件名失效)
-        openDialog.setDirectory(path);
-        openDialog.setNameFilter("*.mp4;;*.avi");//设置文件过滤器
-        openDialog.selectNameFilter("*.mp4");//设置默认选中文件保存类型
-        openDialog.setFileMode(QFileDialog::ExistingFile);//设置文件模式，例如：已存在未存在都可选择，只能选中已存在文件，同时选中多个文件等
+        openDialog.setAcceptMode(QFileDialog::AcceptOpen);
+        openDialog.setWindowTitle("Open " + title[i++] + " Video");
+        openDialog.setDirectory(openPath);
+        openDialog.setNameFilter(nameFilter);
+        openDialog.selectNameFilter(filter);
+        openDialog.setFileMode(QFileDialog::ExistingFile);
         if (openDialog.exec() == QFileDialog::AcceptSave)
         {
-            //打开文件的路径(包含文件名)
             QString openFile = openDialog.selectedFiles().first();
-            //打开文件的路径
-            QString openPath = openDialog.directory().path();
-            //获得文件过滤器得类型
-            QString filter = openDialog.selectedNameFilter();
+            openPath = openDialog.directory().path();
+            filter = openDialog.selectedNameFilter();
             //ui->lblPath->setText(openFile);
             if ((m = new MyVideo(std::string(openFile.toStdString().c_str())))->IsOpen())
             {
@@ -216,19 +225,24 @@ void MainWindow::OpenDialog()
                 ui->TimeBox->setEnabled(false);
             }
         }
+        else
+        {
+            return;
+        }
     }
     double time = INT_MAX;
     for (auto& m : myVideo)
     {
-        if (m->IsOpen())
+        if (m && m->IsOpen())
         {
             if (mainVideo == nullptr)
                 mainVideo = m;
             else
             {
-                if (time < m->GetFrameCount() / m->GetFps())
+                double time_tmp = m->GetFrameCount() / m->GetFps();
+                if (time < time_tmp)
                 {
-                    time = m->GetFrameCount() / m->GetFps();
+                    time = time_tmp;
                     mainVideo = m;
                 }
             }
@@ -334,5 +348,128 @@ void MainWindow::Record()
     else
     {
         fileOper->StartSave();
+    }
+}
+
+void MainWindow::UpdateTheme()
+{
+    auto list = themeGroup->actions();
+    int i = 0;
+    auto checkedAction = themeGroup->checkedAction();
+    foreach(QAction *a, list)
+    {
+        if (a == checkedAction)
+            break;
+        ++i;
+    }
+    QChart::ChartTheme theme = static_cast<QChart::ChartTheme>(i);
+
+    for (CapturePanel* panel : captureWidget->capturePanel) {
+        panel->chartView->chart()->setTheme(theme);
+    }
+
+    // Set palette colors based on selected theme
+    QPalette pal = window()->palette();
+    switch (theme)
+    {
+    case QChart::ChartThemeLight:
+    {
+        pal.setColor(QPalette::Window, QRgb(0xf0f0f0));
+        pal.setColor(QPalette::WindowText, QRgb(0x404044));
+        break;
+    }
+    case QChart::ChartThemeDark:
+    {
+        pal.setColor(QPalette::Window, QRgb(0x121218));
+        pal.setColor(QPalette::WindowText, QRgb(0xd6d6d6));
+        break;
+    }
+    case QChart::ChartThemeBlueCerulean:
+    {
+        pal.setColor(QPalette::Window, QRgb(0x40434a));
+        pal.setColor(QPalette::WindowText, QRgb(0xd6d6d6));
+        break;
+    }
+    case QChart::ChartThemeBrownSand:
+    {
+        pal.setColor(QPalette::Window, QRgb(0x9e8965));
+        pal.setColor(QPalette::WindowText, QRgb(0x404044));
+        break;
+    }
+    case QChart::ChartThemeBlueNcs:
+    {
+        pal.setColor(QPalette::Window, QRgb(0x018bba));
+        pal.setColor(QPalette::WindowText, QRgb(0x404044));
+        break;
+    }
+    case QChart::ChartThemeHighContrast:
+    {
+        pal.setColor(QPalette::Window, QRgb(0xffab03));
+        pal.setColor(QPalette::WindowText, QRgb(0x181818));
+        break;
+    }
+    case QChart::ChartThemeBlueIcy:
+    {
+        pal.setColor(QPalette::Window, QRgb(0xcee7f0));
+        pal.setColor(QPalette::WindowText, QRgb(0x404044));
+        break;
+    }
+    default:
+    {
+        pal.setColor(QPalette::Window, QRgb(0xf0f0f0));
+        pal.setColor(QPalette::WindowText, QRgb(0x404044));
+    }
+    }
+
+    window()->setPalette(pal);
+}
+
+void MainWindow::UpdateAntialiasing()// Update antialiasing
+{
+    bool checked = AntialiasAct->isChecked();
+    for (CapturePanel* panel : captureWidget->capturePanel)
+        panel->chartView->setRenderHint(QPainter::Antialiasing, checked);
+}
+
+void MainWindow::UpdateAnimation()// Update animation options
+{
+    auto list = animationGroup->actions();
+    int i = 0;
+    auto checkedAction = animationGroup->checkedAction();
+    foreach(QAction * a, list)
+    {
+        if (a == checkedAction)
+            break;
+        ++i;
+    }
+    QChart::AnimationOptions options = static_cast<QChart::AnimationOptions>(i);
+
+    for (CapturePanel* panel : captureWidget->capturePanel)
+        panel->chartView->chart()->setAnimationOptions(options);
+}
+
+void MainWindow::UpdateLegend()// Update legend alignment
+{
+    auto list = animationGroup->actions();
+    int i = 0;
+    auto checkedAction = animationGroup->checkedAction();
+    foreach(QAction * a, list)
+    {
+        if (a == checkedAction)
+            break;
+        ++i;
+    }
+    Qt::Alignment alignment = static_cast<Qt::Alignment>(i);
+
+    if (!alignment) {
+        for (CapturePanel* panel : captureWidget->capturePanel)
+            panel->chartView->chart()->legend()->hide();
+    }
+    else {
+        for (CapturePanel* panel : captureWidget->capturePanel)
+        {
+            panel->chartView->chart()->legend()->setAlignment(alignment);
+            panel->chartView->chart()->legend()->show();
+        }
     }
 }
