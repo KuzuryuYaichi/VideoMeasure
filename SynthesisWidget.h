@@ -32,4 +32,4 @@ private:
     CustomTableModel* model;
 };
 
-#endif /* THEMEWIDGET_H */
+#endif /* SYNTHESISWIDGET_H */

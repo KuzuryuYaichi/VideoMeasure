@@ -4,8 +4,8 @@
 #include <QtCore/QAbstractTableModel>
 #include <QtCore/QHash>
 #include <QtCore/QRect>
-#include "MyVideo.h"
 #include <QScatterDataProxy>
+#include "MyVideo.h"
 
 class CustomTableModel : public QAbstractTableModel
 {

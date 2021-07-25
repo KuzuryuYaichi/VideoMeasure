@@ -4,10 +4,8 @@
 #include <QtCore/QScopedPointer>
 #include <QtCore/QVariantList>
 
-//! [1]
 typedef QVariantList FishDataItem;
 typedef QList<FishDataItem*> FishDataItemList;
-//! [1]
 
 class FishDataSet : public QObject
 {
@@ -17,7 +15,6 @@ public:
     explicit FishDataSet();
     ~FishDataSet();
 
-    //! [0]
     void clear();
 
     int addItem(FishDataItem* item);
@@ -28,7 +25,6 @@ public:
 Q_SIGNALS:
     void itemsAdded(int index, int count);
     void dataCleared();
-    //! [0]
 
 private:
     FishDataItemList m_variantData;

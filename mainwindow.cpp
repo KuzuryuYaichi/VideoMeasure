@@ -1,13 +1,12 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-//#include "CapCV.h"
 #include "MatView.h"
 #include <QtCharts>
 
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ui->TimeBox->setEnabled(false);
+    ui->tabWidget->setEnabled(false);
     ui->MatButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
     ui->FileButton->setIcon(style()->standardIcon(QStyle::SP_DialogSaveButton));
     connect(ui->timeStart, SIGNAL(timeChanged(const QTime&)), this, SLOT(OnStartTimeUpdate(const QTime&)));
@@ -34,42 +33,25 @@ MainWindow::~MainWindow()
 
 void MainWindow::open()
 {
-    //if (maybeSave()) {
-    //    QString fileName = QFileDialog::getOpenFileName(this);
-    //    if (!fileName.isEmpty())
-    //        loadFile(fileName);
-    //}
     OpenDialog();
 }
 
 bool MainWindow::save()
 {
-    //if (curFile.isEmpty()) {
-    //    return saveAs();
-    //}
-    //else {
-    //    return saveFile(curFile);
-    //}
     return true;
 }
 
 bool MainWindow::saveAs()
 {
-    //QFileDialog dialog(this);
-    //dialog.setWindowModality(Qt::WindowModal);
-    //dialog.setAcceptMode(QFileDialog::AcceptSave);
-    //if (dialog.exec() != QDialog::Accepted)
-    //    return false;
-    //return saveFile(dialog.selectedFiles().first());
     return true;
 }
 
 void MainWindow::about()
 {
     QMessageBox::about(this, tr("About Application"),
-        tr("The <b>Application</b> example demonstrates how to "
-            "write modern GUI applications using Qt, with a menu bar, "
-            "toolbars, and a status bar."));
+        tr("The <b><i>VideoMeasure</i></b> Application is a simple GUI "
+            "using <b>Qt OpenCV</b>, dealing <b>MP4</b> or <b>AVI</b> "
+            "videos to capture trajectory."));
 }
 
 void MainWindow::createActions()
@@ -218,22 +200,25 @@ void MainWindow::OpenDialog()
                 ui->lblFps->setText(QString::number(Fps = m->GetFps()));
                 ui->SliderProgress->setMinimum(0);
                 ui->SliderProgress->setMaximum(FrameCount);
-                ui->TimeBox->setEnabled(true);
-            }
-            else
-            {
-                ui->TimeBox->setEnabled(false);
             }
         }
         else
         {
+            for (auto& m : myVideo)
+            {
+                if (m)
+                {
+                    delete m;
+                    m = nullptr;
+                }
+            }
             return;
         }
     }
     double time = INT_MAX;
     for (auto& m : myVideo)
     {
-        if (m && m->IsOpen())
+        if (m->IsOpen())
         {
             if (mainVideo == nullptr)
                 mainVideo = m;
@@ -248,6 +233,7 @@ void MainWindow::OpenDialog()
             }
         }
     }
+    ui->tabWidget->setEnabled(true);
 }
 
 void MainWindow::SliderValueChange()

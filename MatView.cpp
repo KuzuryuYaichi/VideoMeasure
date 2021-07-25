@@ -1,4 +1,3 @@
-//MatView.cpp
 #include "MatView.h"
 #include <opencv2/core.hpp>
 #include <opencv2/imgcodecs.hpp>

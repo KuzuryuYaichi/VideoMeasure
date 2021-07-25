@@ -98,7 +98,7 @@ long MyVideo::GetFps()
 	return Fps;
 }
 
-bool MyVideo::GetFrameMat(cv::Mat& fore, cv::Mat& orgFrame, std::vector<cv::Point>& result)//orgFrame是原图像 fore是二值化后的图像 frame是原图画出了轮廓
+bool MyVideo::GetFrameMat(cv::Mat& fore, cv::Mat& orgFrame, std::vector<cv::Point>& result)//orgFrame是原图像 fore是二值化后的图像 frame是原图画出了灰度轮廓
 {
 	cap >> orgFrame;
 	cv::cvtColor(orgFrame, frame, cv::COLOR_BGR2GRAY);
