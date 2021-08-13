@@ -4,7 +4,7 @@
 
 using namespace QtDataVisualization;
 
-GraphDataGenerator::GraphDataGenerator(Q3DScatter* bargraph, QTableView* tableWidget, CustomTableModel* model):
+GraphDataGenerator::GraphDataGenerator(MyScatter* bargraph, QTableView* tableWidget, CustomTableModel* model):
     m_graph(bargraph),
     m_dataTimer(0),
     m_columnCount(100),

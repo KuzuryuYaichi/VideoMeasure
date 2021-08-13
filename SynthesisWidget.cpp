@@ -34,7 +34,7 @@ SynthesisWidget::~SynthesisWidget()
 
 void SynthesisWidget::Synthesis_Setup()
 {
-    Q3DScatter* graph = new Q3DScatter();
+    MyScatter* graph = new MyScatter();
     QWidget* container = QWidget::createWindowContainer(graph);
 
     if (!graph->hasContext()) {

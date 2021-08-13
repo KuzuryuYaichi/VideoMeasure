@@ -21,13 +21,14 @@
 #include <QtWidgets/QMessageBox>
 
 #include "CustomTableModel.h"
+#include "MyScatter.h"
 
 using namespace QtDataVisualization;
 
 class GraphDataGenerator : public QObject
 {
 public:
-    explicit GraphDataGenerator(Q3DScatter* bargraph, QTableView* tableWidget, CustomTableModel* model);
+    explicit GraphDataGenerator(MyScatter* bargraph, QTableView* tableWidget, CustomTableModel* model);
     ~GraphDataGenerator();
 
     void setupModel();
@@ -42,7 +43,7 @@ public:
     void ModelSetData(std::vector<std::vector<int>>& result);
 
 private:
-    Q3DScatter* m_graph;
+    MyScatter* m_graph;
     QTimer* m_dataTimer;
     int m_columnCount;
     int m_rowCount;

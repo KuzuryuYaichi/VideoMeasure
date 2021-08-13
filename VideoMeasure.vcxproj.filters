@@ -91,6 +91,9 @@
     <ClCompile Include="CustomScatterTableModel.cpp">
       <Filter>DataVisual\DataModel</Filter>
     </ClCompile>
+    <ClCompile Include="MyScatter.cpp">
+      <Filter>DataVisual\3D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="debug\moc_predefs.h.cbt">
@@ -160,6 +163,9 @@
       <Filter>File</Filter>
     </ClInclude>
     <ClInclude Include="GraphDataGenerator.h">
+      <Filter>DataVisual\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="MyScatter.h">
       <Filter>DataVisual\3D</Filter>
     </ClInclude>
   </ItemGroup>
