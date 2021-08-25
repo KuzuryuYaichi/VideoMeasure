@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>img/Arrow.obj</file>
+        <file>img/GoldenFish.obj</file>
+        <file>img/oo.obj</file>
+        <file>img/test_Fish.obj</file>
+        <file>img/narrowarrow.obj</file>
+    </qresource>
+</RCC>

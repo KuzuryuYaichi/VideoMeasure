@@ -1,9 +1,10 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "MatView.h"
+#include <vector>
 #include <QtCharts>
 
-MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWindow)
+MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWindow), qTimer(new QTimer(this))
 {
     ui->setupUi(this);
     ui->tabWidget->setEnabled(false);
@@ -15,7 +16,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     connect(ui->SliderProgress, SIGNAL(valueChanged(int)), this, SLOT(SliderValueChange(int)));
     connect(ui->SliderProgress, SIGNAL(sliderMoved(int)), this, SLOT(SliderMoved(int)));
     connect(ui->MatButton, SIGNAL(clicked()), this, SLOT(MatPlay()));
-    qTimer = new QTimer(this);
+    connect(ui->FrameRateSlider, SIGNAL(valueChanged(int)), this, SLOT(FrameRateSliderValueChange(int)));
     connect(qTimer, SIGNAL(timeout()), this, SLOT(SliderValueChange()));
     fileOper = new QFileOper();
     ui->tab_Video->layout()->addWidget(videoWidget = new VideoWidget(this));
@@ -157,7 +158,7 @@ void MainWindow::OnStartTimeUpdate(const QTime& t)
 
 void MainWindow::OnEndTimeUpdate(const QTime& t)
 {
-    int total = 1000 * mainVideo->GetFrameCount() / mainVideo->GetFps();
+    int total = 1000 * mainVideo->GetFrameCount() / Fps;
     if (t.msecsTo(ui->timeStart->time()) > 0)
     {
         ui->timeEnd->setTime(ui->timeStart->time());
@@ -236,18 +237,6 @@ void MainWindow::OpenDialog()
     ui->tabWidget->setEnabled(true);
 }
 
-void MainWindow::SliderValueChange()
-{
-    int pos = mainVideo->GetPosFrames();
-    ui->SliderProgress->setValue(pos ? pos : 1);
-}
-
-void MainWindow::SliderMoved(int pos)
-{
-    for(auto&m : myVideo)
-        m->SetPosFrames(pos);
-}
-
 void MainWindow::GetFrameInfo(cv::Mat& image, std::vector<cv::Point>& result, QString& str)
 {
     int nr = image.rows; // number of rows
@@ -261,6 +250,20 @@ void MainWindow::GetFrameInfo(cv::Mat& image, std::vector<cv::Point>& result, QS
         str += QString("P[") + QString::number(index++) + "]: {X: " + QString::number(x) + " Y: " + QString::number(y) + "}";
         str += QString("{ R: ") + QString::number(data[base]) + QString(" G: ") + QString::number(data[base + 1]) + QString(" B: ") + QString::number(data[base + 2]) + "}\n";
     }
+}
+
+void MainWindow::SliderMoved(int pos)
+{
+    for (auto& m : myVideo)
+        m->SetPosFrames(pos);
+}
+
+void MainWindow::SliderValueChange()
+{
+    int pos = mainVideo->GetPosFrames();
+    //for (auto& m : myVideo)
+    //    m->SetPosFrames(pos + );
+    ui->SliderProgress->setValue(pos ? pos : 1);
 }
 
 cv::Mat fore, orgFrame;
@@ -292,9 +295,7 @@ void MainWindow::SliderValueChange(int pos)
         }
         case 2:
         {
-            std::vector<std::vector<int>> res;
-            res.resize(10);
-            for (auto& vec : res)vec.resize(3);
+            std::vector<std::vector<int>> res(10, std::vector<int>(3));
             for (int i = 0; i < result[0].size() && i < res.size(); ++i)
             {
                 res[i][0] = result[0][i].x;
@@ -310,7 +311,13 @@ void MainWindow::SliderValueChange(int pos)
     QTime q(0,0,0,0);
     q = q.addMSecs(mainVideo->GetPosMsec());
     ui->lblMsec->setText(q.toString("HH:mm:ss"));
-    ui->lblFps->setText(QString::number(mainVideo->GetFps()));
+}
+
+void MainWindow::FrameRateSliderValueChange(int pos)
+{
+    ui->lblFrameRate->setText(QString::number(pos) + "%");
+    int passFrames = (1 - pos / 100.0f) * Fps;
+    ui->lblFps->setText(QString::number(Fps - passFrames));
 }
 
 void MainWindow::MatPlay()
@@ -348,9 +355,9 @@ void MainWindow::UpdateTheme()
             break;
         ++i;
     }
-    QChart::ChartTheme theme = static_cast<QChart::ChartTheme>(i);
+    auto theme = static_cast<QChart::ChartTheme>(i);
 
-    for (CapturePanel* panel : captureWidget->capturePanel) {
+    for (auto& panel: captureWidget->capturePanel) {
         panel->chartView->chart()->setTheme(theme);
     }
 

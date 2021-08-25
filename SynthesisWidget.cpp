@@ -34,7 +34,7 @@ SynthesisWidget::~SynthesisWidget()
 
 void SynthesisWidget::Synthesis_Setup()
 {
-    MyScatter* graph = new MyScatter();
+    Q3DScatter* graph = new Q3DScatter();
     QWidget* container = QWidget::createWindowContainer(graph);
 
     if (!graph->hasContext()) {
@@ -65,7 +65,9 @@ void SynthesisWidget::Synthesis_Setup()
     tableWidget->setModel(model);
     //QItemModelScatterDataProxy* proxy = new QItemModelScatterDataProxy(tableWidget->model(), "X Axis", "Y Axis", "Z Axis");
     QScatter3DSeries* series = new QScatter3DSeries(proxy);
-    series->setMesh(QAbstract3DSeries::MeshPyramid);
+    series->setMesh(QAbstract3DSeries::MeshUserDefined);
+    series->setUserDefinedMesh(":/img/test_Fish.obj");
+    series->setItemSize(0.025f);
 
     QScatterDataArray data;
     for (int i = 0; i < 10; ++i)

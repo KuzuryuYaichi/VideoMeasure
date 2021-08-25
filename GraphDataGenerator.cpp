@@ -4,7 +4,7 @@
 
 using namespace QtDataVisualization;
 
-GraphDataGenerator::GraphDataGenerator(MyScatter* bargraph, QTableView* tableWidget, CustomTableModel* model):
+GraphDataGenerator::GraphDataGenerator(Q3DScatter* bargraph, QTableView* tableWidget, CustomTableModel* model):
     m_graph(bargraph),
     m_dataTimer(0),
     m_columnCount(100),
@@ -164,7 +164,43 @@ void GraphDataGenerator::fixTableSize()
     m_tableWidget->setFixedHeight(height + 2);
 }
 
+QVector3D GraphDataGenerator::GetVerticalVector(QVector3D coordinate_x)
+{
+    const QVector3D tmp(1, 1, 1);
+    QVector3D res;
+    res.setX(coordinate_x.y() * tmp.z() - coordinate_x.z() * tmp.y());
+    res.setY(coordinate_x.z() * tmp.x() - coordinate_x.x() * tmp.z());
+    res.setZ(coordinate_x.x() * tmp.y() - coordinate_x.y() * tmp.x());
+    return res;
+}
+
 void GraphDataGenerator::ModelSetData(std::vector<std::vector<int>>& result)
 {
+    m_graph->removeCustomItems();
     model->ModelSetData(result);
+
+    float xRange = m_graph->axisX()->max() - m_graph->axisX()->min(),
+        yRange = (m_graph->axisY()->max() - m_graph->axisY()->min()) * 2,
+        zRange = m_graph->axisZ()->max() - m_graph->axisZ()->min();
+
+    auto iter = result.begin() + 1;
+    for (float x0 = result[0][0], y0 = result[0][1], z0 = result[0][2]; iter != result.end(); iter++)
+    {
+        auto& tmp1 = *iter;
+        float x1 = tmp1[0], y1 = tmp1[1], z1 = tmp1[2];
+        QCustom3DItem* item = new QCustom3DItem;
+        item->setMeshFile(":/img/narrowarrow.obj");
+        QImage texture(500, 500, QImage::Format_ARGB32);
+        texture.fill(QColorConstants::DarkYellow);
+        item->setTextureImage(texture);
+        QVector3D dst(x1, y1, z1), src(x0, y0, z0);
+        auto direction = QVector3D((x1 - x0) / xRange, (y1 - y0) / yRange, (z0 - z1) / zRange);
+        item->setScaling(QVector3D(0.05f, 18 * direction.length() * 0.1f, 0.05f));
+        item->setPosition((src + dst) / 2);
+        item->setRotation(QQuaternion::rotationTo(QVector3D(0, 1, 0), direction));
+        m_graph->addCustomItem(item);
+        x0 = x1;
+        y0 = y1;
+        z0 = z1;
+    }
 }

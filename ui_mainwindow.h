@@ -44,6 +44,10 @@ public:
     QLabel *label;
     QLabel *lblFrame;
     QSpacerItem *horizontalSpacer_3;
+    QLabel *label_2;
+    QSlider *FrameRateSlider;
+    QLabel *lblFrameRate;
+    QSpacerItem *horizontalSpacer;
     QLabel *label_6;
     QLabel *lblMsec;
     QSpacerItem *horizontalSpacer_2;
@@ -124,6 +128,28 @@ public:
 
         horizontalLayout_5->addItem(horizontalSpacer_3);
 
+        label_2 = new QLabel(centralwidget);
+        label_2->setObjectName(QString::fromUtf8("label_2"));
+
+        horizontalLayout_5->addWidget(label_2);
+
+        FrameRateSlider = new QSlider(centralwidget);
+        FrameRateSlider->setObjectName(QString::fromUtf8("FrameRateSlider"));
+        FrameRateSlider->setMaximum(100);
+        FrameRateSlider->setValue(100);
+        FrameRateSlider->setOrientation(Qt::Horizontal);
+
+        horizontalLayout_5->addWidget(FrameRateSlider);
+
+        lblFrameRate = new QLabel(centralwidget);
+        lblFrameRate->setObjectName(QString::fromUtf8("lblFrameRate"));
+
+        horizontalLayout_5->addWidget(lblFrameRate);
+
+        horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_5->addItem(horizontalSpacer);
+
         label_6 = new QLabel(centralwidget);
         label_6->setObjectName(QString::fromUtf8("label_6"));
 
@@ -195,7 +221,7 @@ public:
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 1106, 26));
+        menubar->setGeometry(QRect(0, 0, 1106, 23));
         MainWindow->setMenuBar(menubar);
         statusbar = new QStatusBar(MainWindow);
         statusbar->setObjectName(QString::fromUtf8("statusbar"));
@@ -218,6 +244,8 @@ public:
         lblFps->setText(QCoreApplication::translate("MainWindow", "0", nullptr));
         label->setText(QCoreApplication::translate("MainWindow", "Frame:", nullptr));
         lblFrame->setText(QCoreApplication::translate("MainWindow", "0", nullptr));
+        label_2->setText(QCoreApplication::translate("MainWindow", "FrameRate:", nullptr));
+        lblFrameRate->setText(QCoreApplication::translate("MainWindow", "100%", nullptr));
         label_6->setText(QCoreApplication::translate("MainWindow", "Time:", nullptr));
         lblMsec->setText(QCoreApplication::translate("MainWindow", "0", nullptr));
         label_3->setText(QCoreApplication::translate("MainWindow", "From:", nullptr));

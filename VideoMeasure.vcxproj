@@ -207,7 +207,6 @@
       <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(Filename).moc</QtMocFileName>
     </ClCompile>
     <ClCompile Include="FishDataSet.cpp" />
-    <ClCompile Include="MyScatter.cpp" />
     <ClCompile Include="ScatterDataModifier.cpp" />
     <ClCompile Include="SynthesisWidget.cpp" />
     <ClCompile Include="GraphDataGenerator.cpp" />
@@ -223,7 +222,6 @@
     <QtMoc Include="SynthesisWidget.h" />
     <QtMoc Include="VideoPanel.h" />
     <QtMoc Include="CustomInputHandler.h" />
-    <ClInclude Include="MyScatter.h" />
     <ClInclude Include="QFileOper.h">
       <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">input</DynamicSource>
       <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(Filename).moc</QtMocFileName>
@@ -267,6 +265,9 @@
     </QtUic>
     <QtUic Include="themewidget.ui" />
     <QtUic Include="VideoWidget.ui" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="Resource.qrc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

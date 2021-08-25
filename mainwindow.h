@@ -52,6 +52,7 @@ private slots:
     void Record();
     void OnStartTimeUpdate(const QTime& t);
     void OnEndTimeUpdate(const QTime& t);
+    void FrameRateSliderValueChange(int pos);
 
 private slots:
     void open();

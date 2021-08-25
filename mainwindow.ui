@@ -99,6 +99,46 @@
          </spacer>
         </item>
         <item>
+         <widget class="QLabel" name="label_2">
+          <property name="text">
+           <string>FrameRate:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSlider" name="FrameRateSlider">
+          <property name="maximum">
+           <number>100</number>
+          </property>
+          <property name="value">
+           <number>100</number>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="lblFrameRate">
+          <property name="text">
+           <string>100%</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
          <widget class="QLabel" name="label_6">
           <property name="text">
            <string>Time:</string>
@@ -203,7 +243,7 @@
      <x>0</x>
      <y>0</y>
      <width>1106</width>
-     <height>26</height>
+     <height>23</height>
     </rect>
    </property>
   </widget>

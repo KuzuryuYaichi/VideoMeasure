@@ -5,11 +5,8 @@
 #include <QtCore/QRandomGenerator>
 #include <QtGui/QColor>
 
-CustomTableModel::CustomTableModel(QObject* parent): QAbstractTableModel(parent)
+CustomTableModel::CustomTableModel(QObject* parent): QAbstractTableModel(parent), m_RowCount(3), m_ColumnCount(10)
 {
-    m_RowCount = 3;
-    m_ColumnCount = 10;
-
     for (int i = 0; i < m_RowCount; i++)
     {
         QVector<qreal>* dataVec = new QVector<qreal>(m_ColumnCount);
